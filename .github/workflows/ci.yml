@@ -11,7 +11,7 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: dtolnay/rust-toolchain@stable
         with:
           components: rustfmt, clippy
@@ -22,9 +22,8 @@ jobs:
         run: cargo clippy --target wasm32-wasip1 -- -D warnings
       - name: Build release plugin
         run: cargo build --locked --release --target wasm32-wasip1
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: zellij-pane-colors
           path: target/wasm32-wasip1/release/zellij-pane-colors.wasm
           if-no-files-found: error
-
