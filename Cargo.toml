@@ -1,0 +1,19 @@
+[package]
+name = "zellij-pane-colors"
+version = "0.1.0"
+edition = "2021"
+publish = false
+description = "Subtle, persistent background colours for Zellij terminal panes"
+license = "MIT"
+repository = "https://github.com/sudo-vaibhav/zellij-pane-colors"
+readme = "README.md"
+keywords = ["zellij", "terminal", "plugin", "wasm"]
+categories = ["command-line-utilities"]
+
+[dependencies]
+zellij-tile = "=0.44.0"
+
+[profile.release]
+lto = true
+opt-level = "s"
+strip = true
