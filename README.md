@@ -90,7 +90,11 @@ zellij action start-or-reload-plugin \
   "file:${XDG_CONFIG_HOME:-$HOME/.config}/zellij/plugins/zellij-pane-colors.wasm"
 ```
 
-The plugin calls `hide_self()` and continues running in the background.
+On Zellij 0.44, manually reloading a rebuilt plugin at the same URL can reuse a
+cached WebAssembly module. A complete Zellij restart is the reliable way to
+activate a newly installed build. Plugins started through `load_plugins` run in
+the background; a manually launched instance may briefly create a visible pane
+for permission approval.
 
 ## Palette
 

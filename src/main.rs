@@ -28,13 +28,13 @@ struct PaneColors {
     handled: HashSet<PaneId>,
     next_palette_index: usize,
     latest_manifest: Option<PaneManifest>,
+    subscription_renewed: bool,
 }
 
 register_plugin!(PaneColors);
 
 impl ZellijPlugin for PaneColors {
     fn load(&mut self, _configuration: BTreeMap<String, String>) {
-        hide_self();
         subscribe(&[EventType::PaneUpdate, EventType::PermissionRequestResult]);
         request_permission(&[
             PermissionType::ReadApplicationState,
@@ -55,6 +55,14 @@ impl ZellijPlugin for PaneColors {
                 }
             }
             Event::PaneUpdate(manifest) => {
+                if !self.subscription_renewed {
+                    // With cached permissions, Zellij 0.44.3 can deliver the
+                    // initial manifest but omit later PaneUpdate events from
+                    // the pre-permission subscription. Renew it once after the
+                    // first authorized manifest.
+                    subscribe(&[EventType::PaneUpdate, EventType::PermissionRequestResult]);
+                    self.subscription_renewed = true;
+                }
                 self.latest_manifest = Some(manifest.clone());
                 self.handle_manifest(manifest);
             }
